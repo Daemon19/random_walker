@@ -7,6 +7,11 @@ namespace cookie
     {
     }
 
+    Vector2::Vector2()
+    {
+        *this = Vector2(0, 0);
+    }
+
     Vector2 Vector2::operator+(const Vector2 &other)
     {
         return Vector2(x + other.x, y + other.y);

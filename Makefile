@@ -1,16 +1,17 @@
+INCLUDE=include
 SRC=src
 OBJ=obj
 BINDIR=bin
 
 CXX=g++
 CXXFLAGS=-Wall -g -std=c++2a
-LDLIBS=-lSDL2main -lSDL2
-INCLUDE_FLAGS=-I include -I include/cookie
+LDLIBS=-lmingw32 -lSDL2main -lSDL2 -lSDL2_gfx
+INCLUDE_FLAGS=-I $(INCLUDE) -I $(INCLUDE)/cookie
 
 SRCS=$(wildcard $(SRC)/*.cc)
 OBJS=$(patsubst $(SRC)/%.cc, $(OBJ)/%.o, $(SRCS))
 DEPENDS=$(patsubst $(SRC)/%.cc, $(OBJ)/%.d, $(SRCS))
-BIN=$(BINDIR)/random_walker
+BIN=$(BINDIR)/random_walker.exe
 
 .PHONY: all run clean
 

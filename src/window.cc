@@ -10,7 +10,7 @@ namespace cookie
     {
         if (!Init(title, w, h))
         {
-            throw std::runtime_error("Gagal membuat Window objek");
+            throw std::runtime_error("Gagal membuat objek Window");
         }
     }
 
@@ -36,7 +36,7 @@ namespace cookie
             return false;
         }
 
-        renderer_ = SDL_CreateRenderer(window_, -1, 0);
+        renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
         if (renderer_ == nullptr)
         {
             std::cerr << "Gagal membuat renderer : " << SDL_GetError() << std::endl;

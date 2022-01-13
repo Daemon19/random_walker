@@ -13,7 +13,7 @@ namespace cookie
 
     public:
         Window() = default;
-
+        Window(const Window &) = delete;
         Window(const std::string &title, int w, int h);
         ~Window();
 
