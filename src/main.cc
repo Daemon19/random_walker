@@ -1,12 +1,16 @@
-#include "cookie.h"
+#include "cookie/cookie.h"
+#include "walker.h"
+#include <array>
 #include <SDL2/SDL.h>
 #include <iostream>
 
 static const int kWindowW = 960;
 static const int kWindowH = 540;
 static const SDL_Color kBackgroundColor = {20, 20, 30, 255};
+static const int kWalkerCount = 10;
 
 static cookie::Window window;
+static std::array<Walker, kWalkerCount> walkers;
 static bool game_running = true;
 
 void RunGame();
@@ -22,6 +26,14 @@ int main(int argc, char *argv[])
     if (!window.Init("Random Walkers", kWindowW, kWindowH))
     {
         return -1;
+    }
+
+    const int kWindowHalfW = kWindowW / 2;
+    const int kWindowHalfH = kWindowH / 2;
+
+    for (Walker &w : walkers)
+    {
+        w = Walker(cookie::Vector2(kWindowHalfW, kWindowHalfW));
     }
 
     RunGame();
@@ -47,6 +59,13 @@ void RunGame()
                                kBackgroundColor.g, kBackgroundColor.b,
                                kBackgroundColor.a);
         SDL_RenderClear(window.renderer());
+
+        for (Walker &w : walkers)
+        {
+            w.Update();
+            w.Draw(window.renderer());
+        }
+
         SDL_RenderPresent(window.renderer());
     }
 }
