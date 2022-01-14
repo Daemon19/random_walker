@@ -3,15 +3,14 @@
 #include "cookie/cookie.h"
 #include <SDL2/SDL.h>
 
-class Walker
+class Walker : cookie::Circle
 {
 private:
     static const float kMaxVel;
-    static const SDL_Color kLineColor;
-    static const SDL_Color kPointColor;
-    static const int kDrawRadius;
+    static const SDL_Color kMovementColor;
+    static const SDL_Color kPosColor;
+    static const int kRadius;
     cookie::Vector2 last_pos_;
-    cookie::Vector2 pos_;
 
 public:
     Walker() = default;

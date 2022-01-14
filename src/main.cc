@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <array>
 #include <iostream>
+#include <memory>
 
 static const int kWindowW = 960;
 static const int kWindowH = 540;
@@ -16,10 +17,14 @@ static const SDL_Color kBackgroundColor = {20, 20, 30, 255};
 static const int kWalkerCount = 10;
 
 static cookie::Window window("Random Walkers", kWindowW, kWindowH);
+
 static cookie::Texture walker_movement_texture(SDL_CreateTexture(
     window.renderer(), SDL_PIXELFORMAT_RGB888,
     SDL_TEXTUREACCESS_TARGET, kWindowW, kWindowH));
-static std::array<Walker, kWalkerCount> walkers;
+
+static std::shared_ptr<std::array<Walker, kWalkerCount>> walkers;
+
+static bool game_paused = false;
 static bool game_running = true;
 
 void Setup();
@@ -49,7 +54,9 @@ void Setup()
     SDL_RenderClear(window.renderer());
     SDL_SetRenderTarget(window.renderer(), nullptr);
 
-    for (Walker &w : walkers)
+    walkers = std::make_shared<std::array<Walker, kWalkerCount>>();
+
+    for (Walker &w : *walkers)
     {
         w = Walker(cookie::Vector2(kWindowHalfW, kWindowHalfH));
     }
@@ -80,6 +87,18 @@ void MainLoop()
                     Setup();
                 }
             }
+            if (e.type == SDL_KEYUP)
+            {
+                if (e.key.keysym.sym == SDLK_SPACE)
+                {
+                    game_paused = !game_paused;
+                }
+            }
+        }
+
+        if (game_paused)
+        {
+            dt = 0;
         }
 
         SDL_SetRenderDrawColor(window.renderer(), kBackgroundColor.r,
@@ -89,7 +108,7 @@ void MainLoop()
         SDL_RenderCopy(window.renderer(), walker_movement_texture,
                        nullptr, nullptr);
 
-        for (Walker &w : walkers)
+        for (Walker &w : *walkers)
         {
             w.Update(dt);
             w.DrawPos(window.renderer());
